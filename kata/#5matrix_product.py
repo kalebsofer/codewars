@@ -18,7 +18,7 @@ M1 = [[ 1,  4, 7,  6,  5],
      [ 1, -2, 4, -2,  6],
      [ 3,  2, 2, -4,  7]]
 
-def sum_prod_diags(matrix):
+def sum_prod_diags(m):
     r, l = 0, 0
     # m = np.matrix(M1)
     for x in range(-len(m), len(m)):
@@ -28,32 +28,3 @@ def sum_prod_diags(matrix):
     return r - l
 
 
-from solution import sum_prod_diags
-import codewars_test as test
-
-@test.describe("Basic Tests")
-def f():
-    @test.it("it should pass basic tests")
-    def f():
-        M1 = [[ 1,  4, 7,  6,  5],
-             [-3,  2, 8,  1,  3],
-             [ 6,  2, 9,  7, -4],
-             [ 1, -2, 4, -2,  6],
-             [ 3,  2, 2, -4,  7]]
-
-        test.assert_equals(sum_prod_diags(M1), 1098)
-
-        M2 = [[ 1,  4, 7,  6],
-             [-3,  2, 8,  1],
-             [ 6,  2, 9,  7],
-             [ 1, -2, 4, -2]]
-
-        test.assert_equals(sum_prod_diags(M2), -11)
-
-        M3 = [[1,2,3,2,1],
-              [2,3,4,3,2],
-              [3,4,5,4,3],
-              [4,5,6,5,4],
-              [5,6,7,6,5]]
-
-        test.assert_equals(sum_prod_diags(M3), 0)
