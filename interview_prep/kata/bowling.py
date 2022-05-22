@@ -58,35 +58,7 @@ If spare or strike in the last (tenth) frame, the bowler gets to throw one or tw
 
 def gene2(x):
     return x + 2
-    
 
-class game:
-    def __init__(self) -> None:
-        self.rolls = []
-    
-    def roll(pins: int) :  
-        # called each time roll occurs
-        pass
- 
-    def score(self):
-        result = 0
-        rollIndex = 0
-        for frameIndex in range(10):
-            if self.isSpare(rollIndex):
-                result += self.spareScore(rollIndex)
-            else:
-                result += self.frameScore(rollIndex )
-            rollIndex += 2
-        return result
-
-    def isSpare(self, rollIndex):
-        return self.rolls[rollIndex] + self.rolls[rollIndex + 1] == 10
-    
-    def spareScore(self, rollIndex):
-        return 10 + self.rolls[rollIndex + 2]
-    
-    def frameScore(self, rollIndex):
-        return self.rolls[rollIndex] + self.rolls[rollIndex + 1]
  
 # game has 10 frames
 # frame has 1 or 2 rolls
@@ -109,14 +81,46 @@ class game:
         
 
 class bowlingGame:
-    def __init__(self) -> None:
+    def __init__(self):
         self.rolls = []
 
     def roll(self, pins):
         self.rolls.append(pins)
 
     def score(self):
-        return 
+        score = 0
+        ridx = 0
+        for frame in range(10):
+            if self.isStrike(ridx) == True:
+                # 10 + next 2 rolls
+                score += self.strikeScore[ridx]
+                ridx += 1
+            elif self.isSpare(ridx) == True:
+                # 10 + next roll
+                score += self.spareScore[ridx]
+                ridx += 2
+            else:
+                score += self.normalScore[ridx]
+                ridx += 2
+        return score
+
+    def isStrike(self, ridx):
+        return self.rolls[ridx] == 10 
+    
+    def isSpare(self, ridx):
+        return self.rolls[ridx] + self.rolls[ridx + 1] == 10
+
+    def strikeScore(self, ridx):
+        return 10 + self.rolls[ridx + 1] + self.rolls[ridx + 2]
+
+    def spareScore(self, ridx):
+        return 10 + self.rolls[ridx + 2]
+
+    def normalScore(self, ridx):
+        return self.rolls[ridx] + self.rolls[ridx + 1]
+
+
+
 
 
     
