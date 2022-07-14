@@ -59,26 +59,7 @@ If spare or strike in the last (tenth) frame, the bowler gets to throw one or tw
 def gene2(x):
     return x + 2
 
- 
-# game has 10 frames
-# frame has 1 or 2 rolls
-# 10th frame has 2 or 3 rolls
 
-
-
-# bowl('X 45 4/ 32')
-# 19 + 9 + 13 + 5
-# 46
-
-# bowl('X X X X X X X X X X X X')
-# 300 
-
-# bowl('9- 9- 9- 9- 9- 9- 9- 9- 9- 9-')
-# 90
-
-# bowl('5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5')
-# 150
-        
 
 class bowlingGame:
     def __init__(self):
@@ -119,11 +100,6 @@ class bowlingGame:
     def normalScore(self, ridx):
         return self.rolls[ridx] + self.rolls[ridx + 1]
 
-
-
-
-
-    
 
 
 # score_str = 'X X X' # 30
