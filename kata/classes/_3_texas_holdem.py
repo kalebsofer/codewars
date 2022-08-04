@@ -36,7 +36,6 @@ An ace-low straight is invalid (ie. A,2,3,4,5 is invalid). This is consistent wi
 import re
 import itertools
 
-
 class poker():
 
     def __init__(self, hand):
@@ -52,19 +51,9 @@ class poker():
             converted.append(x)
         return converted
 
-    # def _convertToCard(self, rank):
-    #     dct = {
-    #         14:'A',13:'K',12:'Q',11:'J', 
-    #         10:'10',9:'9',8:'8',7:'7',
-    #         6:'6',5:'5',4:'4',3:'3',2:'2'
-    #         }
-    #     converted = list(map(dct.get, rank))
-    #     return converted
-
     def _getRanks(self):
         ranks = list(map(int, self._convertToRank()))
         res = {i:ranks.count(i) for i in ranks}
-
         return ranks, res
 
     def isStraight(self):
@@ -82,7 +71,6 @@ class poker():
         suits.update([i[-1] for i in self.hand])
         if len(suits) == 1: flush = True
         ranks = sorted(self._getRanks()[0], reverse=True)
-
         return flush, ranks
 
     def isStraightFlush(self):
@@ -112,8 +100,8 @@ class poker():
         if pair == True and trips == True:
             fullhouse = True
 
-        ranks = list(map(int, self._convertToRank()))
-        res = {i:ranks.count(i) for i in ranks}
+        ranks = self._getRanks()[0]
+        res = self._getRanks()[1]
         res = dict(sorted(res.items(), key=lambda item: item[1], reverse=True))
         ranks_to_return = list(res.keys())
 
@@ -123,7 +111,7 @@ class poker():
     def isTrips(self):
         trips = False
         res = self._getRanks()[1]
- 
+        
         for k, v in res.items():
             if v == 3:
                 trips = True
@@ -136,44 +124,44 @@ class poker():
 
     def isPair(self):
         twos, pair, twopair = 0, False, False
-        ranks = list(map(int, self._convertToRank()))
-        res = {i:ranks.count(i) for i in ranks}
+        res = self._getRanks()[1]
+        ranks_to_return = []
 
         for k, v in res.items():
             if v == 2:
                 twos += 1
+        res = [v[0] for v in sorted(res.items(), key=lambda kv: (-kv[1], kv[0]))]
         if twos == 1:
             pair = True
+            ranks_to_return = [res[0]] + sorted(res[1:], reverse=True)
         elif twos == 2:
             twopair = True
             pair = False
-        res = dict(sorted(res.items(), key=lambda item: item[1], reverse=True))
-        ranks_to_return = list(res.keys())
+            ranks_to_return = sorted(res[:2], reverse=True) + sorted(res[2:], reverse=True)
+
         return pair, twopair, ranks_to_return
 
 
     def run(self):
-    
         if self.isStraightFlush()[0] == True:
-            msg, rank, val = 'Straight Flush', self.isStraightFlush()[1], 9
+            msg, rank, val = 'straight-flush', self.isStraightFlush()[1], 9
         elif self.isFourOfKind()[0] == True:
-            msg, rank, val =  'Four of a Kind', self.isFourOfKind()[1], 8
+            msg, rank, val =  'four-of-a-kind', self.isFourOfKind()[1], 8
         elif self.isFullHouse()[0] == True:
-            msg, rank, val =  'Full House', self.isFullHouse()[1], 7
+            msg, rank, val =  'full house', self.isFullHouse()[1], 7
         elif self.isFlush()[0] == True:
-            msg, rank, val =  'Flush', self.isFlush()[1], 6
+            msg, rank, val =  'flush', self.isFlush()[1], 6
         elif self.isStraight()[0] == True:
-            msg, rank, val =  'Straight', self.isStraight()[1], 5
+            msg, rank, val =  'straight', self.isStraight()[1], 5
         elif self.isTrips()[0] == True:
-            msg, rank, val =  'Three of a Kind', self.isTrips()[1], 4
+            msg, rank, val =  'three-of-a-kind', self.isTrips()[1], 4
         elif self.isPair()[1] == True:
-            msg, rank, val =  'Two Pair', self.isPair()[2], 3
+            msg, rank, val =  'two pair', self.isPair()[2], 3
         elif self.isPair()[0] == True:
-            msg, rank, val =  'Pair', self.isPair()[2], 2
+            msg, rank, val =  'pair', self.isPair()[2], 2
         else:
             rank = self._getRanks()[0]
-            msg, rank, val =  'Nothing', sorted(rank, reverse=True), 1
-
+            msg, rank, val =  'nothing', sorted(rank, reverse=True), 1
 
         return msg, rank, val
 
@@ -202,7 +190,8 @@ def hand(hole_cards, community_cards):
 
 
 # tests
-hand(["K♠", "A♦"], ["J♣", "Q♥", "9♥", "2♥", "3♦"]) # ("nothing", ["A", "K", "Q", "J", "9"])
+# hand(["K♠", "A♦"], ["J♣", "Q♥", "9♥", "2♥", "3♦"]) # ("nothing", ["A", "K", "Q", "J", "9"])
+# hand(['7♦', '9♣'], ['K♦', '4♦', '5♣', 'A♥', '7♠']) # ('pair', ['7', 'A', 'K', '9'])
 # hand(["K♠", "Q♦"], ["J♣", "Q♥", "9♥", "2♥", "3♦"]) #("pair", ["Q", "K", "J", "9"])
 # hand(["K♠", "J♦"], ["J♣", "K♥", "9♥", "2♥", "3♦"]) #("two pair", ["K", "J", "9"])
 # hand(["4♠", "9♦"], ["J♣", "Q♥", "Q♠", "2♥", "Q♦"]) #("three-of-a-kind", ["Q", "J", "9"])
